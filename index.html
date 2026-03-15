@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Currículo — Vagas Macaé & Região</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #f5f4f0;
+    --surface:   #ffffff;
+    --surface2:  #f0efeb;
+    --border:    rgba(42,74,65,0.12);
+    --teal:      #2a4a41;
+    --teal-mid:  #3d6b5e;
+    --teal-light:#5a9688;
+    --gold:      #c9a84c;
+    --gold-light:#e8c97a;
+    --gold-pale: #fdf6e3;
+    --text:      #1a2e29;
+    --muted:     #6b8078;
+    --red:       #c0392b;
+    --green:     #2e7d60;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family:'Inter',sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height:100vh;
+  }
+
+  .topbar {
+    background: var(--teal);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+  }
+  .topbar-logo {
+    width:32px; height:32px; border-radius:50%;
+    background:var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:0.75rem; color:var(--teal);
+    flex-shrink:0; letter-spacing:-0.5px;
+  }
+  .topbar-text {
+    color:rgba(255,255,255,0.9);
+    font-size:0.82rem; font-weight:500; letter-spacing:0.02em;
+  }
+  .topbar-text strong { color:var(--gold-light); }
+
+  .wrapper {
+    max-width:780px; margin:0 auto;
+    padding:2rem 1.25rem 5rem;
+  }
+
+  header {
+    text-align:center;
+    padding:2.5rem 0 2rem;
+    animation:fadeDown 0.6s ease both;
+  }
+  .hero-tag {
+    display:inline-flex; align-items:center; gap:0.45rem;
+    background:var(--gold-pale);
+    border:1px solid rgba(201,168,76,0.4);
+    border-radius:999px; padding:0.35rem 0.9rem;
+    font-size:0.72rem; font-weight:700;
+    color:var(--gold); letter-spacing:0.08em;
+    text-transform:uppercase; margin-bottom:1.2rem;
+  }
+  h1 {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(1.9rem,5vw,2.9rem);
+    font-weight:800; color:var(--teal);
+    line-height:1.15; margin-bottom:0.75rem;
+  }
+  h1 em { font-style:italic; color:var(--gold); }
+  .subtitle {
+    color:var(--muted); font-size:0.97rem; font-weight:400;
+    max-width:480px; margin:0 auto; line-height:1.65;
+  }
+
+  .steps {
+    display:flex; justify-content:center; align-items:center;
+    gap:0; margin:2rem 0;
+    animation:fadeUp 0.6s 0.15s ease both;
+  }
+  .step {
+    display:flex; align-items:center; gap:0.5rem;
+    font-size:0.8rem; font-weight:600; color:var(--muted);
+    transition:color 0.3s;
+  }
+  .step.active { color:var(--teal); }
+  .step.done   { color:var(--green); }
+  .step-num {
+    width:26px; height:26px; border-radius:50%;
+    border:2px solid currentColor;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.72rem; font-weight:700;
+    transition:all 0.3s; flex-shrink:0;
+  }
+  .step.active .step-num { background:var(--teal); border-color:var(--teal); color:#fff; }
+  .step.done   .step-num { background:var(--green); border-color:var(--green); color:#fff; }
+  .step-line { width:36px; height:2px; background:var(--border); margin:0 0.3rem; }
+
+  .card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px; padding:1.75rem;
+    margin-bottom:1.2rem;
+    box-shadow:0 2px 12px rgba(42,74,65,0.06);
+    transition:border-color 0.3s, box-shadow 0.3s;
+    animation:fadeUp 0.55s ease both;
+  }
+  .card:focus-within {
+    border-color:rgba(42,74,65,0.35);
+    box-shadow:0 4px 20px rgba(42,74,65,0.1);
+  }
+  .card-label {
+    display:flex; align-items:center; gap:0.6rem;
+    font-size:0.78rem; font-weight:700;
+    color:var(--teal); letter-spacing:0.05em;
+    text-transform:uppercase; margin-bottom:0.9rem;
+  }
+  .card-icon {
+    width:30px; height:30px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.9rem;
+  }
+  .icon-cv   { background:rgba(42,74,65,0.1); }
+  .icon-vaga { background:rgba(201,168,76,0.15); }
+
+  textarea {
+    width:100%; background:var(--surface2);
+    border:1px solid var(--border); border-radius:10px;
+    color:var(--text); font-family:'Inter',sans-serif;
+    font-size:0.9rem; font-weight:400;
+    line-height:1.65; padding:0.9rem 1rem;
+    resize:vertical; min-height:150px;
+    transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  textarea::placeholder { color:rgba(107,128,120,0.5); }
+  textarea:focus {
+    outline:none;
+    border-color:rgba(42,74,65,0.4);
+    box-shadow:0 0 0 3px rgba(42,74,65,0.07);
+  }
+  .char-hint { font-size:0.72rem; color:var(--muted); margin-top:0.45rem; }
+
+  .btn-analyze {
+    width:100%; padding:1rem 2rem;
+    background:linear-gradient(135deg,var(--teal),var(--teal-mid));
+    border:none; border-radius:12px; color:#fff;
+    font-family:'Inter',sans-serif;
+    font-size:1rem; font-weight:700;
+    cursor:pointer; transition:all 0.25s;
+    box-shadow:0 4px 18px rgba(42,74,65,0.25);
+    margin-top:0.4rem; letter-spacing:0.01em;
+    position:relative; overflow:hidden;
+  }
+  .btn-analyze::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,rgba(255,255,255,0.12),transparent);
+    opacity:0; transition:opacity 0.25s;
+  }
+  .btn-analyze:hover::after { opacity:1; }
+  .btn-analyze:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(42,74,65,0.32); }
+  .btn-analyze:active { transform:translateY(0); }
+  .btn-analyze:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+  .error-box {
+    display:none;
+    background:rgba(192,57,43,0.08);
+    border:1px solid rgba(192,57,43,0.25);
+    border-radius:10px; padding:1rem 1.2rem;
+    color:#a93226; font-size:0.87rem;
+    margin-bottom:1rem; align-items:center; gap:0.6rem;
+  }
+  .error-box.visible { display:flex; }
+
+  .loading-state {
+    display:none; text-align:center;
+    padding:3rem; animation:fadeIn 0.4s ease;
+  }
+  .loading-state.visible { display:block; }
+  .spinner-ring {
+    width:50px; height:50px;
+    border:3px solid rgba(42,74,65,0.15);
+    border-top-color:var(--teal);
+    border-radius:50%;
+    animation:spin 0.85s linear infinite;
+    margin:0 auto 1.4rem;
+  }
+  .loading-steps { list-style:none; max-width:260px; margin:1.2rem auto 0; text-align:left; }
+  .loading-steps li {
+    font-size:0.83rem; color:var(--muted);
+    padding:0.3rem 0;
+    display:flex; align-items:center; gap:0.55rem;
+    transition:color 0.3s;
+  }
+  .loading-steps li.active { color:var(--teal); font-weight:600; }
+  .loading-steps li.done   { color:var(--green); }
+  .ls-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0; }
+
+  #results { display:none; animation:fadeUp 0.6s ease both; }
+  #results.visible { display:block; }
+
+  .score-hero {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px; padding:2.2rem 1.8rem;
+    text-align:center; margin-bottom:1.2rem;
+    box-shadow:0 2px 12px rgba(42,74,65,0.07);
+    position:relative; overflow:hidden;
+  }
+  .score-hero::before {
+    content:''; position:absolute; top:-60px; left:50%;
+    transform:translateX(-50%);
+    width:280px; height:200px;
+    border-radius:50%; filter:blur(70px); opacity:0.18;
+  }
+  .score-hero.high::before { background:var(--green); }
+  .score-hero.mid::before  { background:var(--gold); }
+  .score-hero.low::before  { background:var(--red); }
+  .score-label {
+    font-size:0.72rem; font-weight:700;
+    letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:0.7rem;
+  }
+  .score-number {
+    font-family:'Playfair Display',serif;
+    font-size:5.5rem; font-weight:800;
+    line-height:1; margin-bottom:0.4rem;
+  }
+  .score-hero.high .score-number { color:var(--green); }
+  .score-hero.mid  .score-number { color:var(--gold); }
+  .score-hero.low  .score-number { color:var(--red); }
+  .score-verdict {
+    font-family:'Playfair Display',serif;
+    font-size:1.3rem; font-weight:700;
+    color:var(--teal); margin-bottom:0.4rem;
+  }
+  .score-sub { color:var(--muted); font-size:0.85rem; }
+
+  .rblock {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px; padding:1.5rem;
+    margin-bottom:1.2rem;
+    box-shadow:0 2px 10px rgba(42,74,65,0.05);
+  }
+  .rblock-title {
+    display:flex; align-items:center; gap:0.5rem;
+    font-size:0.78rem; font-weight:700;
+    letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:1rem;
+  }
+  .rb-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-bottom:1.2rem; }
+  @media(max-width:560px){ .two-col { grid-template-columns:1fr; } }
+
+  .rblock ul { list-style:none; }
+  .rblock li {
+    font-size:0.88rem; line-height:1.55;
+    padding:0.45rem 0;
+    border-bottom:1px solid var(--border);
+    display:flex; gap:0.5rem; align-items:flex-start;
+  }
+  .rblock li:last-child { border-bottom:none; }
+  .li-ic { font-size:0.85rem; flex-shrink:0; margin-top:1px; }
+
+  .bar-wrap { margin-top:0.75rem; }
+  .bar-label {
+    display:flex; justify-content:space-between;
+    font-size:0.77rem; color:var(--muted); margin-bottom:0.3rem;
+  }
+  .bar-track { height:7px; background:var(--surface2); border-radius:99px; overflow:hidden; }
+  .bar-fill  { height:100%; border-radius:99px; transition:width 1s cubic-bezier(.4,0,.2,1); }
+
+  .kw-list { display:flex; flex-wrap:wrap; gap:0.45rem; }
+  .kw-tag {
+    background:rgba(42,74,65,0.08);
+    border:1px solid rgba(42,74,65,0.2);
+    border-radius:6px; padding:0.22rem 0.6rem;
+    font-size:0.76rem; color:var(--teal); font-weight:600;
+  }
+  .kw-tag.missing {
+    background:rgba(192,57,43,0.07);
+    border-color:rgba(192,57,43,0.2);
+    color:var(--red);
+  }
+
+  .headline-box {
+    background:var(--gold-pale);
+    border:1px solid rgba(201,168,76,0.35);
+    border-radius:14px; padding:1.4rem 1.5rem;
+    margin-bottom:1.2rem;
+  }
+  .headline-box .rblock-title { color:var(--gold); }
+  .headline-box p {
+    font-size:1rem; font-weight:500;
+    font-style:italic; color:var(--teal); line-height:1.65;
+  }
+
+  .ai-summary {
+    background:rgba(42,74,65,0.05);
+    border:1px solid rgba(42,74,65,0.15);
+    border-left:4px solid var(--teal);
+    border-radius:0 14px 14px 0;
+    padding:1.4rem 1.5rem; margin-bottom:1.2rem;
+  }
+  .ai-summary-title {
+    font-size:0.72rem; font-weight:700;
+    letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--teal-mid); margin-bottom:0.6rem;
+  }
+  .ai-summary p {
+    font-size:0.94rem; line-height:1.75;
+    color:var(--text); font-weight:400;
+  }
+
+  /* ── CTA CONSULTORIA ── */
+  .cta-consultoria {
+    border-radius:20px; padding:2.2rem 1.8rem;
+    margin-bottom:1.2rem; text-align:center;
+    position:relative; overflow:hidden;
+  }
+  .cta-consultoria.show-cta {
+    background:linear-gradient(135deg,var(--teal) 0%,#1e3830 100%);
+    border:1px solid rgba(201,168,76,0.3);
+    box-shadow:0 8px 32px rgba(42,74,65,0.25);
+  }
+  .cta-badge {
+    display:inline-flex; align-items:center; gap:0.4rem;
+    background:rgba(201,168,76,0.2);
+    border:1px solid rgba(201,168,76,0.4);
+    border-radius:999px; padding:0.3rem 0.85rem;
+    font-size:0.7rem; font-weight:700;
+    color:var(--gold-light); letter-spacing:0.07em;
+    text-transform:uppercase; margin-bottom:1rem;
+  }
+  .cta-consultoria h3 {
+    font-family:'Playfair Display',serif;
+    font-size:1.55rem; font-weight:800;
+    color:#fff; margin-bottom:0.6rem; line-height:1.25;
+  }
+  .cta-consultoria .cta-desc {
+    color:rgba(255,255,255,0.75);
+    font-size:0.9rem; line-height:1.65;
+    max-width:420px; margin:0 auto 1.4rem;
+  }
+  .cta-consultoria .cta-desc strong { color:var(--gold-light); }
+  .cta-bullets {
+    display:flex; flex-direction:column; gap:0.5rem;
+    max-width:360px; margin:0 auto 1.6rem; text-align:left;
+  }
+  .cta-bullet {
+    display:flex; align-items:flex-start; gap:0.55rem;
+    font-size:0.85rem; color:rgba(255,255,255,0.85); line-height:1.45;
+  }
+  .cta-bullet-ic { color:var(--gold-light); flex-shrink:0; font-size:0.9rem; }
+  .btn-cta {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:linear-gradient(135deg,var(--gold),#b8922e);
+    border:none; border-radius:12px;
+    color:var(--teal); font-family:'Inter',sans-serif;
+    font-size:0.95rem; font-weight:800;
+    padding:0.9rem 1.8rem; cursor:pointer;
+    transition:all 0.25s;
+    box-shadow:0 4px 20px rgba(201,168,76,0.4);
+    text-decoration:none; letter-spacing:0.01em;
+  }
+  .btn-cta:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(201,168,76,0.5); }
+  .cta-social { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:1rem; }
+
+  .footer-actions {
+    display:flex; gap:0.8rem; flex-wrap:wrap;
+    justify-content:center; margin-top:1.2rem;
+  }
+  .btn-ghost {
+    display:inline-flex; align-items:center; gap:0.4rem;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px; color:var(--teal);
+    font-family:'Inter',sans-serif;
+    font-size:0.85rem; font-weight:600;
+    padding:0.65rem 1.2rem; cursor:pointer;
+    transition:all 0.2s; text-decoration:none;
+  }
+  .btn-ghost:hover { border-color:var(--teal-mid); background:rgba(42,74,65,0.05); }
+
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:none} }
+  @keyframes fadeUp   { from{opacity:0;transform:translateY(18px)}  to{opacity:1;transform:none} }
+  @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+  @keyframes spin     { to{transform:rotate(360deg)} }
+  .card:nth-child(1){animation-delay:0.05s}
+  .card:nth-child(2){animation-delay:0.15s}
+  .card:nth-child(3){animation-delay:0.25s}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">VM</div>
+  <p class="topbar-text"><strong>@vagasmacaeregiao</strong> · Recolocação Profissional | Macaé e Região</p>
+</div>
+
+<div class="wrapper">
+
+  <header>
+    <div class="hero-tag">✦ Análise gratuita com IA</div>
+    <h1>Seu currículo está pronto<br>para <em>essa vaga?</em></h1>
+    <p class="subtitle">Cole seu currículo e a descrição da vaga. A IA analisa o match, aponta lacunas e diz exatamente o que melhorar.</p>
+  </header>
+
+  <div class="steps" id="stepsBar">
+    <div class="step active" id="step1">
+      <div class="step-num">1</div><span>Seus dados</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step2">
+      <div class="step-num">2</div><span>Analisar</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step3">
+      <div class="step-num">3</div><span>Resultado</span>
+    </div>
+  </div>
+
+  <div id="formSection">
+    <div class="card">
+      <div class="card-label">
+        <div class="card-icon icon-cv">📄</div>
+        Seu Currículo
+      </div>
+      <textarea id="curriculo" placeholder="Cole aqui o texto completo do currículo — experiências, formação, habilidades, conquistas..." rows="8"></textarea>
+      <p class="char-hint">Quanto mais completo, mais precisa é a análise.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">
+        <div class="card-icon icon-vaga">🎯</div>
+        Descrição da Vaga ou Objetivo Profissional
+      </div>
+      <textarea id="vaga" placeholder="Cole a descrição completa da vaga — requisitos, responsabilidades — ou descreva seu objetivo de recolocação..." rows="6"></textarea>
+      <p class="char-hint">Pode ser uma vaga específica ou seu objetivo de carreira.</p>
+    </div>
+
+    <div class="error-box" id="errorBox">
+      ⚠️ <span id="errorMsg">Por favor, preencha ambos os campos.</span>
+    </div>
+
+    <button class="btn-analyze" onclick="analyze()">
+      🔍 Analisar meu Currículo com IA
+    </button>
+  </div>
+
+  <div class="loading-state" id="loadingState">
+    <div class="spinner-ring"></div>
+    <p style="font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;color:var(--teal)">Analisando...</p>
+    <p style="color:var(--muted);font-size:0.83rem;margin-top:0.35rem">A IA está lendo seu perfil</p>
+    <ul class="loading-steps">
+      <li id="ls1"><div class="ls-dot"></div>Lendo currículo e vaga</li>
+      <li id="ls2"><div class="ls-dot"></div>Calculando compatibilidade</li>
+      <li id="ls3"><div class="ls-dot"></div>Identificando pontos fortes</li>
+      <li id="ls4"><div class="ls-dot"></div>Mapeando lacunas</li>
+      <li id="ls5"><div class="ls-dot"></div>Gerando recomendações</li>
+    </ul>
+  </div>
+
+  <div id="results"></div>
+
+</div>
+
+<script>
+const SYSTEM_PROMPT = `Você é especialista em recrutamento e carreira no Brasil. Analise o currículo e a vaga/objetivo e retorne APENAS JSON válido, sem markdown, sem texto extra, sem comentários. Use strings curtas e objetivas. Estrutura obrigatória:
+{"score":0-100,"verdict":"título curto","summary":"2-3 frases diretas","pontos_fortes":["p1","p2","p3"],"lacunas":["l1","l2","l3"],"palavras_chave_presentes":["k1","k2","k3","k4"],"palavras_chave_ausentes":["k1","k2","k3"],"acoes_imediatas":["a1","a2","a3"],"como_reescrever_objetivo":"headline sugerida","dimensoes":{"experiencia":0-100,"formacao":0-100,"habilidades_tecnicas":0-100,"soft_skills":0-100,"alinhamento_cultural":0-100}}`;
+
+async function analyze() {
+  const curriculo = document.getElementById('curriculo').value.trim();
+  const vaga = document.getElementById('vaga').value.trim();
+  const errorBox = document.getElementById('errorBox');
+  const errorMsg = document.getElementById('errorMsg');
+  errorBox.classList.remove('visible');
+
+  if (!curriculo || !vaga) {
+    errorMsg.textContent = 'Por favor, preencha o currículo e a descrição da vaga.';
+    errorBox.classList.add('visible'); return;
+  }
+  if (curriculo.length < 80) {
+    errorMsg.textContent = 'O currículo parece muito curto. Adicione mais detalhes.';
+    errorBox.classList.add('visible'); return;
+  }
+
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('results').style.display = 'none';
+  const loading = document.getElementById('loadingState');
+  loading.classList.add('visible');
+
+  const lsIds = ['ls1','ls2','ls3','ls4','ls5'];
+  let si = 0;
+  const stepInterval = setInterval(() => {
+    if (si > 0) {
+      const prev = document.getElementById(lsIds[si-1]);
+      prev.classList.remove('active'); prev.classList.add('done');
+    }
+    if (si < lsIds.length) {
+      document.getElementById(lsIds[si]).classList.add('active'); si++;
+    } else clearInterval(stepInterval);
+  }, 900);
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:4096,
+        system:SYSTEM_PROMPT,
+        messages:[{role:"user",content:`CURRICULO:\n${curriculo}\n\n---\n\nVAGA/OBJETIVO:\n${vaga}`}]
+      })
+    });
+
+    clearInterval(stepInterval);
+    lsIds.forEach(s => {
+      document.getElementById(s).classList.remove('active');
+      document.getElementById(s).classList.add('done');
+    });
+
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || '';
+    let clean = raw.replace(/```json|```/g,'').trim();
+    const jm = clean.match(/\{[\s\S]*\}/);
+    if (jm) clean = jm[0];
+
+    let r;
+    try {
+      r = JSON.parse(clean);
+    } catch(pe) {
+      let rep = clean;
+      if ((rep.match(/"/g)||[]).length % 2 !== 0) rep += '"';
+      rep = rep.replace(/,\s*$/, '');
+      let o=0,c=0;
+      for(const ch of rep){ if(ch==='{' || ch==='[') o++; else if(ch==='}' || ch===']') c++; }
+      for(let i=0;i<o-c;i++) rep += (rep.lastIndexOf('[')>rep.lastIndexOf('{'))?']':'}';
+      r = JSON.parse(rep);
+    }
+
+    loading.classList.remove('visible');
+    renderResults(r);
+    ['step1','step2'].forEach(s=>{
+      document.getElementById(s).classList.remove('active');
+      document.getElementById(s).classList.add('done');
+    });
+    document.getElementById('step3').classList.add('active');
+
+  } catch(e) {
+    clearInterval(stepInterval);
+    loading.classList.remove('visible');
+    document.getElementById('formSection').style.display = 'block';
+    errorMsg.textContent = 'Erro ao processar. Tente novamente. (' + e.message + ')';
+    errorBox.classList.add('visible');
+    console.error(e);
+  }
+}
+
+function renderResults(r) {
+  const score = r.score || 0;
+  const tier  = score >= 70 ? 'high' : score >= 40 ? 'mid' : 'low';
+  const emoji = tier==='high' ? '🟢' : tier==='mid' ? '🟡' : '🔴';
+  const dims  = r.dimensoes || {};
+
+  // CTA lógica:
+  // score >= 70 → perfil forte → mostrar Kit
+  // score 40-69 → potencial mas precisa ajuste → consultoria (tom motivador)
+  // score < 40  → precisa virada → consultoria (tom urgente)
+  const showConsultoria = score < 70;
+  const urgente = score < 40;
+
+  const ctaBlock = showConsultoria ? `
+    <div class="cta-consultoria show-cta">
+      <div class="cta-badge">${urgente ? '⚠️ Atenção necessária' : '✦ Você tem potencial!'}</div>
+      <h3>${urgente
+        ? 'Seu perfil precisa de uma virada estratégica'
+        : 'Falta pouco — vamos chegar a 80%+ juntos!'
+      }</h3>
+      <p class="cta-desc">${urgente
+        ? 'A análise identificou <strong>lacunas críticas</strong> que podem estar te impedindo de avançar. Uma consultoria personalizada pode transformar completamente seu resultado.'
+        : 'Seu perfil tem uma boa base! Com <strong>ajustes estratégicos</strong> no currículo, LinkedIn e posicionamento, você chega muito mais longe.'
+      }</p>
+      <div class="cta-bullets">
+        <div class="cta-bullet"><span class="cta-bullet-ic">✓</span>Currículo revisado e alinhado à vaga ideal</div>
+        <div class="cta-bullet"><span class="cta-bullet-ic">✓</span>LinkedIn otimizado para atrair recrutadores</div>
+        <div class="cta-bullet"><span class="cta-bullet-ic">✓</span>Estratégia personalizada para Macaé e região</div>
+        <div class="cta-bullet"><span class="cta-bullet-ic">✓</span>Preparação para entrevistas e negociação salarial</div>
+      </div>
+      <a class="btn-cta" href="https://linktr.ee/vagasmacaeregiao" target="_blank">
+        💬 Quero consultoria com a Jaque
+      </a>
+      <p class="cta-social">+2 mil pessoas recolocadas em Macaé e região</p>
+    </div>
+  ` : `
+    <div style="background:var(--surface);border:1px solid rgba(46,125,96,0.3);border-radius:16px;padding:1.6rem;text-align:center;margin-bottom:1.2rem;box-shadow:0 2px 10px rgba(42,74,65,0.07);">
+      <div style="font-size:1.8rem;margin-bottom:0.5rem">🎉</div>
+      <p style="font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--green);margin-bottom:0.5rem">Perfil muito bem alinhado!</p>
+      <p style="font-size:0.88rem;color:var(--muted);line-height:1.65;max-width:380px;margin:0 auto 1.2rem">Agora refine ainda mais com o <strong style="color:var(--teal)">Kit Carreira Imparável</strong> — modelos de currículo, scripts de negociação e muito mais.</p>
+      <a href="https://linktr.ee/vagasmacaeregiao" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(135deg,var(--teal),var(--teal-mid));border:none;border-radius:10px;color:#fff;font-size:0.88rem;font-weight:700;padding:0.7rem 1.4rem;text-decoration:none;">
+        📦 Ver Kit Carreira Imparável
+      </a>
+    </div>
+  `;
+
+  const html = `
+    <div class="score-hero ${tier}">
+      <div class="score-label">COMPATIBILIDADE COM A VAGA</div>
+      <div class="score-number">${score}%</div>
+      <div class="score-verdict">${emoji} ${r.verdict || 'Análise concluída'}</div>
+      <div class="score-sub">cruzamento entre seu perfil e os requisitos da vaga</div>
+    </div>
+
+    <div class="ai-summary">
+      <div class="ai-summary-title">✦ Diagnóstico da IA</div>
+      <p>${r.summary || ''}</p>
+    </div>
+
+    <div class="rblock">
+      <div class="rblock-title"><div class="rb-dot" style="background:var(--teal)"></div>Análise por Dimensão</div>
+      ${Object.entries({
+        'Experiência Profissional': dims.experiencia,
+        'Formação Acadêmica':       dims.formacao,
+        'Habilidades Técnicas':     dims.habilidades_tecnicas,
+        'Soft Skills':              dims.soft_skills,
+        'Alinhamento Cultural':     dims.alinhamento_cultural
+      }).map(([label,val])=>{
+        const v = val||0;
+        const col = v>=70?'var(--green)':v>=40?'var(--gold)':'var(--red)';
+        return `<div class="bar-wrap">
+          <div class="bar-label"><span>${label}</span><span style="color:${col};font-weight:700">${v}%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:${col}" data-w="${v}%"></div></div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="two-col">
+      <div class="rblock">
+        <div class="rblock-title"><div class="rb-dot" style="background:var(--green)"></div>Pontos Fortes</div>
+        <ul>${(r.pontos_fortes||[]).map(p=>`<li><span class="li-ic">✓</span>${p}</li>`).join('')}</ul>
+      </div>
+      <div class="rblock">
+        <div class="rblock-title"><div class="rb-dot" style="background:var(--red)"></div>Lacunas Identificadas</div>
+        <ul>${(r.lacunas||[]).map(p=>`<li><span class="li-ic">△</span>${p}</li>`).join('')}</ul>
+      </div>
+    </div>
+
+    <div class="rblock">
+      <div class="rblock-title"><div class="rb-dot" style="background:#3b82f6"></div>Palavras-Chave da Vaga</div>
+      <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.6rem">✅ Presentes no seu currículo</p>
+      <div class="kw-list">${(r.palavras_chave_presentes||[]).map(k=>`<span class="kw-tag">✓ ${k}</span>`).join('')}</div>
+      <p style="font-size:0.75rem;color:var(--muted);margin:0.9rem 0 0.6rem">❌ Ausentes — adicione ao currículo</p>
+      <div class="kw-list">${(r.palavras_chave_ausentes||[]).map(k=>`<span class="kw-tag missing">✗ ${k}</span>`).join('')}</div>
+    </div>
+
+    <div class="rblock">
+      <div class="rblock-title"><div class="rb-dot" style="background:var(--gold)"></div>Ações Imediatas</div>
+      <ul>${(r.acoes_imediatas||[]).map((a,i)=>`
+        <li>
+          <span style="font-weight:800;color:var(--gold);font-size:0.8rem;flex-shrink:0;margin-top:1px">${i+1}.</span>
+          <span style="font-size:0.88rem;line-height:1.55">${a}</span>
+        </li>`).join('')}
+      </ul>
+    </div>
+
+    ${r.como_reescrever_objetivo?`
+    <div class="headline-box">
+      <div class="rblock-title"><div class="rb-dot" style="background:var(--gold)"></div>Sugestão de Headline / Objetivo</div>
+      <p>"${r.como_reescrever_objetivo}"</p>
+    </div>`:''}
+
+    ${ctaBlock}
+
+    <div class="footer-actions">
+      <button class="btn-ghost" onclick="restart()">↩ Analisar outro currículo</button>
+      <a href="https://www.instagram.com/vagasmacaeregiao" target="_blank" class="btn-ghost">📲 @vagasmacaeregiao</a>
+    </div>
+  `;
+
+  const el = document.getElementById('results');
+  el.innerHTML = html;
+  el.classList.add('visible');
+  el.style.display = 'block';
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}), 80);
+  setTimeout(()=>{
+    document.querySelectorAll('.bar-fill[data-w]').forEach(b=>{
+      b.style.width = b.getAttribute('data-w');
+    });
+  }, 350);
+}
+
+function restart() {
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('formSection').style.display = 'block';
+  document.getElementById('curriculo').value = '';
+  document.getElementById('vaga').value = '';
+  ['step1','step2','step3'].forEach(s=>{
+    document.getElementById(s).classList.remove('active','done');
+  });
+  document.getElementById('step1').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
